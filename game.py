@@ -50,7 +50,8 @@ game_state = 0
 
 degree = 0
 goal_degree = randint(0, 36) * 10
-backroundx = randint(0, 900)
+lighthouse_degree = randint(0, 359)
+lighthouse_x = lighthouse_degree / 360 * background_width
 enemy_rect = pygame.Rect((300, 250, 200, 50))
 
 pygame.display.set_caption("Sea Raider 2")
@@ -98,11 +99,19 @@ def draw():
 
 
     elif game_state == 1:
-        game_surface.blit(background, (-offset + backroundx, -300))
-        game_surface.blit(background, (background_width - offset + backroundx, -300))
+        game_surface.blit(background, (-offset + lighthouse_x, -300))
+        game_surface.blit(background, (background_width - offset + lighthouse_x, -300))
         game_surface.blit(skala, (-offset, -300))
         game_surface.blit(skala, (skala_width - offset, -300))
         game_surface.blit(periskop, (-35, -10))
+
+def lighthouse_button():
+    diff = abs(degree - (lighthouse_degree + 80))
+    diff = min(diff, 360 - diff)
+
+    if diff < 20:
+        print("Leuchtturm im Fadenkreuz")
+        pygame.draw.rect(game_surface, (255, 255, 255), pygame.Rect(400, 500, 200, 50))
 
 while True:
 
@@ -136,9 +145,15 @@ while True:
                 elif game_state == 1 and goal_degree - 5 < degree < goal_degree + 5:
                     game_state = 2
 
+            elif event.key == pygame.K_KP_ENTER:
+                pass
 
 
 
+
+
+
+    lighthouse_button()
     keyboard()
     draw()
     if game_state == 1:
